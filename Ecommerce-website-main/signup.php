@@ -1,132 +1,24 @@
 <?php
-require_once('connection.php');
-
-if (isset($_POST['uname']) && !empty($_POST['uname']) && isset($_POST['psw']) && !empty($_POST['psw']) && isset($_POST['email']) && !empty($_POST['email']) && isset($_POST['psw-repeat']) && !empty($_POST['psw-repeat'])){
-    //Stores Values in Variable
-    $username = mysqli_real_escape_string($conn, $_POST['uname']);
-    $email = mysqli_real_escape_string($conn, $_POST['email']);
-    $password = mysqli_real_escape_string($conn, $_POST['psw']);
-    $selectq = mysqli_query($conn, "select * from users where username ='{$username}' ") or die(mysqli_error($conn));
-
-    $count = mysqli_num_rows($selectq);
-	if((strlen($password) > 8 && strlen($password) < 15)){
-		if ($count > 0) {
-			$response['flag'] = 0;
-			//Already Registrion message.....
-			echo '<div style="background-color:#52b350; padding:10px; font-size:26px; weight:500;"><center>You are already registered.<br>Click Here For <a href="login.php">Login</a></center></div>';
-			} else {
-				$insertquery = mysqli_query($conn, "insert into users (`username`,`email_id`,`password`) "
-                . "values ('{$username}','{$email}','{$password}')") or die(mysqli_error($conn));
-				//Below Function will Give you last Inserted Record ID
-				$lastinsertid = mysqli_insert_id($conn);
-				if ($insertquery) {
-					$response['flag'] = 1;
-					//Messege for Succesfully Registration....
-					echo '<div style="background-color:#52b350; padding:10px; font-size:26px; weight:500;"><center>Registered Succesfully.</center></div>';
-					//Email Function
-					 $to = "$email";
-					$subject = "E-commerce Website:";
-					$message="Welcome to our Website..."."<br><br><br>"."Buy the items as you want."."<br>".
-					"We have best products as you wanted"."<br>"."<br>"."Your Username:".$username."<br>"
-					."Your Password:".$password."<br>";
-
-					// Always set content-type when sending HTML email
-					$headers = "MIME-Version: 1.0" . "\r\n";
-					$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-
-					// More headers
-					$headers .= 'From: <webmaster@example.com>' . "\r\n";
-					//$head
-					if(mail($to,$subject,$message,$headers)){
-					echo "<div style='background-color:green;font-size:20px;font-weight:600; padding: 10px;'>
-					Your account is created successfully.You can buy the items now.</div>";
-					}
-					else{
-						echo "<div style='background-color:rgba(255,0,0,0.6); padding:10px;'>
-							Server is not responding please try again later..</div>";
-					}
-
-
-				}else {
-						echo "Please Try Again Something Went Wrong";
-						}
-			}
+$showAlert=false;
+$showError=false;
+if($_SERVER["REQUEST_METHOD"] == "POST"){
+	include 'connection.php';
+	$name=$_POST['name'];
+	$email=$_POST['email'];
+	$password=$_POST['pwd'];
+	$cpassword=$_POST['psw-repeat'];
+	$exists=false;
+	if(($password == $cpassword) && $exists == false){
+		$sql="INSERT INTO `users` ( `username`, `email_id`, `password`) VALUES ('$name','$email','$password')";
+		$result=mysqli_query($conn,$sql);
+		if($result){
+			$showAlert=true;
+		}
 	}else{
-		echo "Please enter password in 8-15 characters.";
+		$showError= true;
 	}
-} else {
-
-    $response['flag'] = 0;
-    $response['message'] = "Required fields missing";
 }
-//echo json_encode($response);
-
-
 ?>
-<!-- <!DOCTYPE html>
-<html>
-<head>
-
-<link href="signup.css" rel="stylesheet" type="text/css" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
-<style>
-.foot .media-icons a{
-            color: white;
-            font-size: 25px;
-            margin-right: 30px;
-        }
-
-</style>
-</head>
-
-
-<body>
-
-<form method="POST" style="border:1px solid #ccc">
-  <div class="container">
-  <center>
-    <h1>Sign Up</h1>
-    <p>Please fill this form to create an account.</p>
-    </center>
-	<hr>
-	<label for="uname"><b>Username</b></label>
-    <input type="text" placeholder="Enter Username" name="uname" required>
-	
-    <label for="email"><b>Email</b></label>
-    <input type="text" placeholder="Enter Email" name="email" required>
-
-    <label for="psw"><b>Password</b></label>
-    <input type="password" placeholder="Enter Password" name="psw" required>
-
-    <label for="psw-repeat"><b>Confirm Password</b></label>
-    <input type="password" placeholder="Confirm Password" name="psw-repeat" required>
-    
-    <label>
-      <input type="checkbox" checked="checked" name="remember" style="margin-bottom:15px"> Remember me
-    </label>
-    
-    <p>By creating an account you agree to our <a href="#" style="color:dodgerblue">Terms & Privacy</a>.</p>
-
-    <div class="clearfix">
-      <button type="submit" class="signupbtn">Sign Up</button>
-	  <button type="button" class="cancelbtn">Cancel</button>
-      
-    </div>
-  </div>
-</form>
-<footer>
-		<div class="foot" style="width:100%; background:#000000; color:#ffffff; padding:20px; text-align:center;">
-			<p>Coprights @Virtual Store.All Rights Reserverd | Cotact Us:+91 1234567890</p>
-			<div class="media-icons">
-			<a target="_blank" href="https://www.facebook.com/zenisha.savaliya.9"><i class="fab fa-facebook-f"></i></a>
-            <a target="_blank" href="https://www.instagram.com/__zenisha____/"><i class="fab fa-instagram"></i></a>
-            <a target="_blank" href="https://www.linkedin.com/in/zenisha-s-a74a51204/"><i class="fab fa-linkedin-in"></i></a>
-			</div>
-		</div>
-</footer>
-
-</body>
-</html> -->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -136,32 +28,44 @@ if (isset($_POST['uname']) && !empty($_POST['uname']) && isset($_POST['psw']) &&
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link href="login.css" rel="stylesheet" type="text/css" />
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+	<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<title>Document</title>
 </head>
+
 <body>
-	<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<!------ Include the above in your HEAD tag ---------->
+	<?php
+	if($showAlert){
+		echo '
+		<div class="alert alert-success">
+  		<strong>Success!</strong> Your account is created..
+		</div>';}
+	if($showError){
+		echo '
+		<div class="alert alert-danger">
+  		<strong>Error!</strong> '.$showError.'
+		</div>';}
+	?>
+	<div class="wrapper fadeInDown">
+		<div id="formContent">
+			<!-- Tabs Titles -->
 
-<div class="wrapper fadeInDown">
-  <div id="formContent">
-    <!-- Tabs Titles -->
+			<!-- Icon -->
+			<div class="fadeIn first">
+				<i class="fa fa-user" aria-hidden="true"> SignUp</i>
+			</div>
 
-    <!-- Icon -->
-    <div class="fadeIn first">
-	<i class="fa fa-user" aria-hidden="true"> SignUp</i>
-    </div>
-
-    <!-- Login Form -->
-    <form>
-      <input type="text" id="name" class="fadeIn second" name="name" placeholder="name">
-	  <input type="text" id="email" class="fadeIn second" name="email" placeholder="email">
-      <input type="text" id="password" class="fadeIn third" name="pwd" placeholder="password">
-      <input type="text" id="password" class="fadeIn third" name="psw-repeat" placeholder="confirm password">
-      <input type="submit" class="fadeIn fourth" name="login" value="Sign Up">
-    </form>
-  </div>
-</div>
+			<!-- Login Form -->
+			<form action="signup.php" method="post" >
+				<input type="text" class="fadeIn second" id="name" name="name" placeholder="name" required>
+				<input type="text" class="fadeIn second" id="email" name="email" placeholder="email" required>
+				<input type="text" class="fadeIn third" id="pwd" name="pwd" placeholder="password" required>
+				<input type="text" class="fadeIn third" id="psw-repeat" name="psw-repeat" placeholder="confirm password" required>
+				<input type="submit" class="fadeIn fourth" name="signup" value="Sign Up">
+			</form>
+		</div>
+	</div>
 </body>
+
 </html>
