@@ -5,7 +5,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 	include 'connection.php';
 	$email=$_POST['email'];
 	$password=$_POST['psw'];
-	
 		$sql="SELECT * FROM `users` WHERE email_id='$email' AND password='$password'";
 		$result=mysqli_query($conn,$sql);
     $num=mysqli_num_rows($result);
@@ -17,7 +16,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
       header("location: index.php");
 		}
 	}else{
-		$showError= "Invalid credentials";
+		$showError= true;
 	}
 ?>
 <!DOCTYPE html>

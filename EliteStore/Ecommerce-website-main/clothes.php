@@ -9,45 +9,47 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
 	<style>
         .foot .media-icons a{
-    color: white;
-     font-size: 25px;
-    margin-right: 30px;
- } 
+            color: white;
+            font-size: 25px;
+            margin-right: 30px;
+        } 
 		
- .topnav {
-  overflow: hidden;
-  background-color: #333;
-}
+        .topnav {
+            overflow: hidden;
+            background-color: #333;
+        }
 
-.topnav a {
-  float: left;
-  color: #f2f2f2;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-  font-size: 17px;
-}
+        .topnav a {
+            float: left;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 17px;
+        }
 
-.topnav a:hover {
-  background-color: #ddd;
-  color: black;
-
-}
-
-/*.topnav a.active {
-  background-color: #04AA6D;
-  color: white;
-} */
+        .topnav a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+        .card-img-top{
+            width: 100%;
+            height: 200px;
+            object-fit: contain;
+        }
+        .topnav a.active {
+            background-color: #fbe8fd;
+            color: black;
+        }
 </style>
 </head>
 <body>
 	<nav>
 <div class="topnav">
-  <a class="active" href="#home">EliteStore</a>
+  <a class="active" href="index.php">EliteStore</a>
   <a href="mycart.php" type="submit">MyCart</a>
-  <a href="login.php">
   <?php
-		if(isset($_SESSION['USER_LOGIN'])){
+		if(isset($_SESSION['logedin'])){
 		echo '<a href="logout.php" target="_blank">Logout</a>';
 		}
 		else{
@@ -65,9 +67,6 @@
 		</div>
 		<div class="col-lg-4">
 		<a href="jewellery.php"type="submit" class="btn btn-primary btn-lg btn-block">Jwellary</a>
-		</div>
-		<div class="col-lg-4">
-		<a href="mycart.php" type="submit" class="btn btn-primary btn-lg btn-block">My Cart</a>
 		</div>
 	</div>
 </div>

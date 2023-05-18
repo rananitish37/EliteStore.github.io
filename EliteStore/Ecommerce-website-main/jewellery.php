@@ -35,21 +35,25 @@
   color: black;
 
 }
+.card-img-top{
+        width: 100%;
+        height: 200px;
+        object-fit: contain;
+    }
 
-/*.topnav a.active {
-  background-color: #04AA6D;
-  color: white;
-} */
+.topnav a.active {
+  background-color: #fbe8fd;
+  color: black;
+}
 </style>
 </head>
 <body>
 	<nav>
 <div class="topnav">
-  <a class="active" href="#home">EliteStore</a>
+  <a class="active" href="./index.php">EliteStore</a>
   <a href="mycart.php" type="submit">MyCart</a>
-  <a href="login.php">
   <?php
-		if(isset($_SESSION['USER_LOGIN'])){
+		if(isset($_SESSION['logedin'])){
 		echo '<a href="logout.php" target="_blank">Logout</a>';
 		}
 		else{

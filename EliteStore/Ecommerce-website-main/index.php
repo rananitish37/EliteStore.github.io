@@ -35,11 +35,10 @@ session_start();
   color: black;
 
 }
-
-/*.topnav a.active {
-  background-color: #04AA6D;
-  color: white;
-} */
+.topnav a.active {
+  background-color: #fbe8fd;
+  color: black;
+}
 </style>
 </head>
 <body>
@@ -48,9 +47,8 @@ session_start();
   <a class="active" href="#home">EliteStore</a>
   <a href="mycart.php" type="submit">MyCart</a>
   <a href="#catagories">Catagories</a>
-  <a href="login.php">
   <?php
-		if(isset($_SESSION['USER_LOGIN'])){
+		if(isset($_SESSION['logedin'])){
 		echo '<a href="logout.php" target="_blank">Logout</a>';
 		}
 		else{
